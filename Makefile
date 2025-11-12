@@ -13,7 +13,7 @@ OBJ_NAME = gameengine
 
 # Makefile rules
 build:
-	$(CC) $(COMPILER_FLAGS) $(LANG_STD) $(INCLUDE_PATH) $(SRC_FILES) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	LC_ALL=C $(CC) $(COMPILER_FLAGS) $(LANG_STD) $(INCLUDE_PATH) $(SRC_FILES) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
 run:
 	./$(OBJ_NAME)

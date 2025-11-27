@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "../ECS/ECS.h"
 #include <SDL2/SDL.h>
 
 const int FPS = 30;
@@ -9,9 +10,11 @@ const int MILLISECS_PER_FRAME = 1000 / FPS;
 class Game {
 	private:
 		bool isRunning;
+		int millisecsPreviousFrame;
 		SDL_Window* window;
 		SDL_Renderer* renderer;
-		int millisecsPreviousFrame;
+
+		std::unique_ptr<Registry> registry;
 
 	public:
 		Game();		// constructor

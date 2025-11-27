@@ -8,11 +8,11 @@
 
 Game::Game() {
 	isRunning = false;
+	registry = std::make_unique<Registry>();
 	Logger::Log("Game constructor called..!");
 }
 
 Game::~Game() {
-	// TODO...
 	Logger::Log("Game destructor called..!");
 }
 
@@ -24,11 +24,8 @@ void Game::Initialize() {
 
 	SDL_DisplayMode displayMode;
 	SDL_GetCurrentDisplayMode(0, &displayMode);
-
 	windowWidth = displayMode.w;
 	windowHeight = displayMode.h;
-	//windowWidth = 800; // displayMode.w;
-	//windowHeight = 600; // displayMode.h;
 
 	window = SDL_CreateWindow(
 		NULL, 
@@ -71,11 +68,9 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
-	// TODO:
-	// Entity tank = registry.CreateEntity();
-	// tank.addComponent<TransformComponent>
-	// tank.addComponent<BoxColliderComponent>
-	// tank.addComponent<SpriteComponent>("./assets/images/tank.png")
+	// Create some entities
+	Entity tank = registry->CreateEntity();
+	Entity truck = registry->CreateEntity();
 }
 
 void Game::Update() {

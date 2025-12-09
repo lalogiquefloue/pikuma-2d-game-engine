@@ -1,6 +1,7 @@
 #ifndef ECS_H
 #define ECS_H
 
+#include "../Logger/Logger.h"
 #include <bitset>
 #include <vector>
 #include <algorithm> 
@@ -23,11 +24,12 @@ struct IComponent {
 // Used to assign a unique id to a component type
 template <typename T>
 class Component: IComponent {
-    // Returns the unique id of Component<T>
-    static int GetId(){
-        static auto id = nextId++;
-        return id;
-    }
+    public:
+        // Returns the unique id of Component<T>
+        static int GetId(){
+            static auto id = nextId++;
+            return id;
+        }
 };
 
 class Entity {
@@ -169,7 +171,7 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args){
     const auto componentId = Component<TComponent>::GetId();
     const auto entityId = entity.GetId();
 
-    if (componentId >= componentPools.size()){
+    if (componentId >= static_cast<int>(componentPools.size())){
         componentPools.resize(componentId + 1, nullptr);
     }
 
@@ -188,6 +190,8 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args){
     
     componentPool->Set(entityId, newComponent);
     entityComponentSignatures[entityId].set(componentId);
+
+    Logger::Log("Component id = " + std::to_string(componentId) + " was addd to entity id  " + std::to_string(entityId));
 }
 
 template <typename TComponent>

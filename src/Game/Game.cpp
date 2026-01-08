@@ -3,6 +3,7 @@
 #include "../ECS/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
+#include "../Systems/MovementSystem.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
@@ -70,12 +71,15 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
+	// Add the systems that need to be processed in our game
+	registry->AddSystem<MovementSystem>();
+
 	// Create some entity
 	Entity tank = registry->CreateEntity();
 
 	// Add some components to that entity
 	tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
-	tank.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
+	tank.AddComponent<RigidBodyComponent>(glm::vec2(1.0, 1.0));
 	// tank.RemoveComponent<TransformComponent>(); // test
 }
 
@@ -87,15 +91,17 @@ void Game::Update() {
 	}
 
 	// diference in time since the last frame in seconds
-	// double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0f;
+	double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0f;
 
 	// store previous frame time
 	millisecsPreviousFrame = SDL_GetTicks();
 
-	// TODO:
-	// MovementSystem.Update();
-	// CollisionSystem.Update();
-	// DamageSystem.Update();
+	// Ask all the systems to update
+	registry->GetSystem<MovementSystem>().Update(deltaTime);
+	// TODO: To be completed...
+
+	// Update the registry to process the entities that are waiting to be created/deleted
+	registry->Update();
 }
 
 void Game::Render() {

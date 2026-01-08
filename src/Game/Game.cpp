@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "../Logger/Logger.h"
 #include "../ECS/ECS.h"
+#include "../Components/TransformComponent.h"
+#include "../Components/RigidBodyComponent.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
@@ -8,11 +10,11 @@
 
 Game::Game() {
 	isRunning = false;
+	registry = std::make_unique<Registry>();
 	Logger::Log("Game constructor called..!");
 }
 
 Game::~Game() {
-	// TODO...
 	Logger::Log("Game destructor called..!");
 }
 
@@ -24,11 +26,8 @@ void Game::Initialize() {
 
 	SDL_DisplayMode displayMode;
 	SDL_GetCurrentDisplayMode(0, &displayMode);
-
 	windowWidth = displayMode.w;
 	windowHeight = displayMode.h;
-	//windowWidth = 800; // displayMode.w;
-	//windowHeight = 600; // displayMode.h;
 
 	window = SDL_CreateWindow(
 		NULL, 
@@ -71,11 +70,13 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
-	// TODO:
-	// Entity tank = registry.CreateEntity();
-	// tank.addComponent<TransformComponent>
-	// tank.addComponent<BoxColliderComponent>
-	// tank.addComponent<SpriteComponent>("./assets/images/tank.png")
+	// Create some entity
+	Entity tank = registry->CreateEntity();
+
+	// Add some components to that entity
+	tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
+	tank.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
+	// tank.RemoveComponent<TransformComponent>(); // test
 }
 
 void Game::Update() {
@@ -86,7 +87,7 @@ void Game::Update() {
 	}
 
 	// diference in time since the last frame in seconds
-	double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0f;
+	// double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0f;
 
 	// store previous frame time
 	millisecsPreviousFrame = SDL_GetTicks();

@@ -147,8 +147,14 @@ class Registry {
         std::set<Entity> entitiesToBeKilled;
 
     public:
-        Registry() = default;
-
+        Registry() {
+            Logger::Log("Registry constructor called");
+        }
+        
+        ~Registry() {
+            Logger::Log("Registry destructor called");
+        }
+        
         void Update();
 
         // Entity management

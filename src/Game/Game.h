@@ -8,28 +8,28 @@ const int FPS = 30;
 const int MILLISECS_PER_FRAME = 1000 / FPS;
 
 class Game {
-	private:
-		bool isRunning;
-		int millisecsPreviousFrame;
-		SDL_Window* window;
-		SDL_Renderer* renderer;
+private:
+  bool isRunning;
+  int millisecsPreviousFrame;
+  SDL_Window *window;
+  SDL_Renderer *renderer;
 
-		std::unique_ptr<Registry> registry;
+  std::unique_ptr<Registry> registry;
 
-	public:
-		Game();		// constructor
-		~Game();	// destructor
+public:
+  Game();  // constructor
+  ~Game(); // destructor
 
-		void Initialize();
-		void Run();
-		void ProcessInput();
-		void Setup();
-		void Update();
-		void Render();
-		void Destroy();
+  void Initialize();
+  void Run();
+  void ProcessInput();
+  void Setup();
+  void Update();
+  void Render();
+  void Destroy();
 
-		int windowWidth;
-		int windowHeight;
+  int windowWidth;
+  int windowHeight;
 };
 
 #endif

@@ -11,10 +11,10 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
-
 Game::Game() {
   isRunning = false;
   registry = std::make_unique<Registry>();
+  assetStore = std::make_unique<AssetStore>();
   Logger::Log("Game constructor called..!");
 }
 
@@ -71,19 +71,25 @@ void Game::Setup() {
   registry->AddSystem<MovementSystem>();
   registry->AddSystem<RenderSystem>();
 
+  // Adding assets to the AssestStore
+  assetStore->AddTexture(renderer, "tank-image",
+                         "./assets/images/tank-panther-right.png");
+  assetStore->AddTexture(renderer, "truck-image",
+                         "./assets/images/truck-ford-right.png");
+
   // Create some entity and add some components to that entity
   Entity tank = registry->CreateEntity();
-  tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0),
+  tank.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0),
                                         glm::vec2(1.0, 1.0), 0.0);
-  tank.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 10.0));
-  tank.AddComponent<SpriteComponent>(10, 10);
+  tank.AddComponent<RigidBodyComponent>(glm::vec2(40.0, 0.0));
+  tank.AddComponent<SpriteComponent>("tank-image", 32, 32);
 
   // Create some entity and add some components to that entity
   Entity truck = registry->CreateEntity();
-  truck.AddComponent<TransformComponent>(glm::vec2(30.0, 60.0),
+  truck.AddComponent<TransformComponent>(glm::vec2(50.0, 100.0),
                                          glm::vec2(1.0, 1.0), 0.0);
-  truck.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
-  truck.AddComponent<SpriteComponent>(15, 30);
+  truck.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 50.0));
+  truck.AddComponent<SpriteComponent>("truck-image", 32, 32);
 }
 
 void Game::Update() {
@@ -114,7 +120,7 @@ void Game::Render() {
   SDL_RenderClear(renderer);
 
   // invoke all the systems thst need to render
-  registry->GetSystem<RenderSystem>().Update(renderer);
+  registry->GetSystem<RenderSystem>().Update(renderer, assetStore);
 
   SDL_RenderPresent(renderer);
 }
